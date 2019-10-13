@@ -1,1 +1,27 @@
 
+function dy = Setofdifferentials(t,y)
+
+% ODE function for Lotka-Volterra Predator-Prey Model
+% Parameters are maintained by a global variable
+
+% y(1) = P(t) (Prothrombin Generation)
+% y(2) = E(t) (Prothrombinase Generation)
+% y(3) = T(t) (Thrombin Generation)
+% y(4) = k1 (kon) (Rate at which thrombin stimulates forming of prothrombinase)
+% y(5) = k2 (koff)(Rate at which thrombin decays)
+% y(6) = k3 (Rate at which prothrombinase decays)
+% Y(7) = Km (Concentration of substrate at which the enzyme works at half
+% of the max capacity)
+
+% dP/dt 
+dy1 = (-y(4)*y(2)*y(1))/(y(1)+y(7));
+% dE/dt 
+dy2 = (y(4)*y(2)*y(1))/(y(1)+y(7))-(y(5)*y(2));
+% dT/dt 
+dy3 = y(5)*y(2)-y(6)*y(3);
+dy4 = 0;
+dy5 = 0;
+dy6 = 0;
+dy7 = 0;
+
+dy = [dy1;dy2;dy3;dy4;dy5;dy6;dy7];
