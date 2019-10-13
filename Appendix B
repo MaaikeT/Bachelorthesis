@@ -1,1 +1,236 @@
+%% ODE45
+global fittingdata stepsizeT;
 
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode45(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('ODE45');
+hold on
+
+
+%% ODE23
+global fittingdata stepsizeT;
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode23(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('ODE23');
+hold on
+
+%% ODE113
+global fittingdata stepsizeT;
+
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode113(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('ODE113');
+hold on
+%decide stepsize T, this is used to decide the stepsize of T when solving
+%the differential equations and thus also in finding the fittingdata
+%(because smaller T, means more existing indexes)
+stepsizeT = 0.01;
+
+%% ODE15s
+global fittingdata stepsizeT;
+
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode15s(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('ODE15s');
+hold on
+%decide stepsize T, this is used to decide the stepsize of T when solving
+%the differential equations and thus also in finding the fittingdata
+%(because smaller T, means more existing indexes)
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+
+%% ODE23s
+global fittingdata stepsizeT;
+
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode23s(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('ODE23s');
+hold on
+%decide stepsize T, this is used to decide the stepsize of T when solving
+%the differential equations and thus also in finding the fittingdata
+%(because smaller T, means more existing indexes)
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%% ODE23t
+global fittingdata stepsizeT;
+
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode23t(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('ODE23t');
+hold on
+%decide stepsize T, this is used to decide the stepsize of T when solving
+%the differential equations and thus also in finding the fittingdata
+%(because smaller T, means more existing indexes)
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%% ODE23tb
+global fittingdata stepsizeT;
+
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode23tb(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('ODE23tb');
+hold on
+%decide stepsize T, this is used to decide the stepsize of T when solving
+%the differential equations and thus also in finding the fittingdata
+%(because smaller T, means more existing indexes)
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 822;
+E0 = 0.005523;
+T0 = 0;
+k1 = 38;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
+k2 = 18.6;
+k3 = 0.43;
+Km = 289;
