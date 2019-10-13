@@ -1,1 +1,794 @@
+%% 1.1. setting 3 parameters still 
+
+% E0, T0 and k3 
+
+global fittingdata stepsizeT;
+ 
+%decide stepsize T, this is used to decide the stepsize of T when solving
+%the differential equations and thus also in finding the fittingdata
+%(because smaller T, means more existing indexes)
+stepsizeT = 0.01;
+
+%Best initial values according to Piet:
+P0 = 810;
+E0 = 0.0150;
+T0 = 0;
+k1 = 38;
+k2 = 25.6;
+k3 = 0.435;
+Km = 288;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode15s(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('Thrombin Generation Curve');
+hold on
+%plot(Tbest,Ybest(:,1),'--g');
+%plot(Tbest,Ybest(:,2),':g')
+
+%Some initial values that are close (P0, k1, k2 and km are changed):
+P0changed = 818;
+E0changed = 0.0150;
+T0changed = 0;
+k1changed = 44;
+k2changed = 28;
+k3changed = 0.435;
+Kmchanged = 289;
+
+%Make a vector of these
+Initialvalchanged = [P0changed, E0changed, T0changed, k1changed, k2changed, k3changed, Kmchanged];
+
+%Plot it next to the beste waardes, in blue
+[Tchanged,Ychanged] = ode15s(@Setofdifferentials,0:stepsizeT:16,Initialvalchanged);
+Yblue = Ychanged(:,3);
+plot(Tchanged,Yblue,'b');
+%plot(Tchanged,Ychanged(:,1),'--b');
+%plot(Tchanged,Ychanged(:,2),':b');
+
+% Took 47 values from this function at the following index numbers (chosen from the main part), index number start at 1 and end at 16001:
+stepsizefittingdata = 50;
+endfittingdata = 10/stepsizeT;
+indexes = [70:stepsizefittingdata:endfittingdata];
+
+%fill matrix 'fittingdata' with the values at these indexpoint
+fittingdata = zeros(length(indexes),2);
+for i = 1:length(indexes) ;
+    v = indexes(i);
+    fittingdata(i,1) = Tchanged(v);
+    fittingdata(i,2) = Yblue(v);
+end
+
+%plot the data
+plot(fittingdata(:,1),fittingdata(:,2),'ko');
+
+%options = optimoptions('lsqnonlin','Display','iter');
+%[Outputparameters,resnorm,residual,exitflag,output] = lsqnonlin(@Inputlsqnonlin,Initialval,[],[],options);
+lb = [0, 0.0150, 0, 0, 0, 0.435, 0];
+ub = [15000, 0.0150, 0, 150, 150, 0.435, 400];
+[OP,resnorm] = lsqnonlin(@Inputlsqnonlin,Initialval,lb,ub);
+OP = OP'
+
+
+%Plot the differentialequation with the new parameters
+[Tcalculated,Ycalculated] = ode15s(@Setofdifferentials,0:stepsizeT:16,OP);
+plot(Tcalculated,Ycalculated(:,3),'r');
+%plot(Tcalculated,Ycalculated(:,2),':r');
+%plot(Tcalculated,Ycalculated(:,1),'--r');
+
+Difference = Initialvalchanged' - OP;
+Perecentualdifference = (Difference / Initialvalchanged') * 100;
+
+%% 1.2. Making 3D plots k1xKm
+
+global fittingdata stepsizeT;
+ 
+%decide stepsize T, this is used to decide the stepsize of T when solving
+%the differential equations and thus also in finding the fittingdata
+%(because smaller T, means more existing indexes)
+stepsizeT = 0.01;
+
+% maka data to fit to
+%Some initial values that are close (P0, k1, k2 and k3 are changed ):
+P0changed = 818;
+E0changed = 0.0150;
+T0changed = 0;
+k1changed = 44;
+k2changed = 28;
+k3changed = 0.435;
+Kmchanged = 289;
+
+%Make a vector of these
+Initialvalchanged = [P0changed, E0changed, T0changed, k1changed, k2changed, k3changed, Kmchanged];
+
+%Plot it next to the beste waardes, in blue
+[Tchanged,Ychanged] = ode15s(@Setofdifferentials,0:stepsizeT:16,Initialvalchanged);
+Yblue = Ychanged(:,3);
+plot(Tchanged,Yblue,'b');
+%plot(Tchanged,Ychanged(:,1),'--b');
+%plot(Tchanged,Ychanged(:,2),':b');
+
+% Took 47 values from this function at the following index numbers (chosen from the main part), index number start at 1 and end at 16001:
+stepsizefittingdata = 20;
+endfittingdata = 10/stepsizeT;
+indexes = [70:stepsizefittingdata:endfittingdata];
+
+%fill matrix 'fittingdata' with the values at these indexpoint
+fittingdata = zeros(length(indexes),2);
+for i = 1:length(indexes) ;
+    v = indexes(i);
+    fittingdata(i,1) = Tchanged(v);
+    fittingdata(i,2) = Yblue(v);
+end
+
+%plot the data
+plot(fittingdata(:,1),fittingdata(:,2),'ko');
+
+%Best initial values according to Piet:
+P0 = 810;
+E0 = 0.0150;
+T0 = 0;
+k1 = 44;
+k2 = 25.8;
+k3 = 0.435;
+Km = 275;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode15s(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('Thrombin Generation Curve');
+hold on
+%plot(Tbest,Ybest(:,1),'--g');
+%plot(Tbest,Ybest(:,2),':g')
+
+%options = optimoptions('lsqnonlin','Display','iter');
+%[Outputparameters,resnorm,residual,exitflag,output] = lsqnonlin(@Inputlsqnonlin,Initialval,[],[],options);
+lb = [0, 0.0150, 0, 0, 0, 0.435, 0];
+ub = [15000, 0.0150, 0, 150, 150, 0.435, 400];
+[OP,resnorm] = lsqnonlin(@Inputlsqnonlin,Initialval,lb,ub);
+OP = OP'
+
+
+%Plot the differentialequation with the new parameters
+[Tcalculated,Ycalculated] = ode15s(@Setofdifferentials,0:stepsizeT:16,OP);
+plot(Tcalculated,Ycalculated(:,3),'r');
+%plot(Tcalculated,Ycalculated(:,2),':r');
+%plot(Tcalculated,Ycalculated(:,1),'--r');
+
+%% 1.3. Plotting contours k1xKm
+
+%First run 1.2., you need the OP - not needed anymore:
+
+%keep these calculated values but change k1 and Km
+xk1 = 40:1:50;
+yk1 = 250:5:350;
+[Xgrid,Ygrid] = meshgrid(xk1,yk1);
+Mresnorms = Xgrid;
+
+for nrk1 = 1:length(xk1) 
+    for nrkm = 1:length(yk1)
+        
+        valk1 = xk1(nrk1);
+        valk1 = yk1(nrkm);
+        
+        OP(4) = valk1;
+        OP(7) = valk1;
+        
+        lb = OP';
+        ub = OP';
+        [newOP,resnorm] = lsqnonlin(@Inputlsqnonlin,OP,lb,ub);
+        newOP = newOP'
+
+        Mresnorms(nrkm, nrk1) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+xlabel('k1')
+ylabel('Km')
+zlabel('Resnorm')
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+xlabel('k1')
+ylabel('Km')
+shading interp;
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5)
+s.EdgeColor = 'none';
+
+%% 1.3.2. Plotting contours k1xKm using Inputlsqnonlin
+
+%First run 1.2., you need the OP - not needed anymore:
+
+%keep these calculated values but change k1 and Km
+xk1 = 40:1:50;
+yk1 = 250:5:350;
+[Xgrid,Ygrid] = meshgrid(xk1,yk1);
+Mresnorms = Xgrid;
+
+for nrk1 = 1:length(xk1) 
+    for nrkm = 1:length(yk1)
+        
+        valk1 = xk1(nrk1);
+        valk1 = yk1(nrkm);
+        
+        OP(4) = valk1;
+        OP(7) = valk1;
+        
+        resnorm = sum((Inputlsqnonlin (OP)).^2);
+        
+        Mresnorms(nrkm, nrk1) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+xlabel('k1')
+ylabel('Km')
+zlabel('Resnorm')
+title('Surface plot k1xKm');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+xlabel('k1')
+ylabel('Km')
+title('Contourplot Inputnonlin k1xKm');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5)
+s.EdgeColor = 'none';
+title('Surface plot k1xKm');
+
+%% 1.4. Plotting contours more detailled k1xKm
+
+%First run 1.2., you need the OP
+OP = [817.997862594090;0.0150000000000000;0;44.0003776995965;28.0006819003247;0.435000000000000;288.986155907162]
+
+%keep these calculated values but change k1 and Km
+xk1 = 40:0.25:50;
+yk1 = 250:1:350;
+[Xgrid,Ygrid] = meshgrid(xk1,yk1);
+Mresnorms = Xgrid;
+
+for nrk1 = 1:length(xk1) 
+    for nrkm = 1:length(yk1)
+        
+        valk1 = xk1(nrk1);
+        valk1 = yk1(nrkm);
+        
+        OP(4) = valk1;
+        OP(7) = valk1;
+        
+        lb = OP';
+        ub = OP';
+        [newOP,resnorm] = lsqnonlin(@Inputlsqnonlin,OP,lb,ub);
+        newOP = newOP'
+
+        Mresnorms(nrkm, nrk1) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+hold on
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5)
+s.EdgeColor = 'none';
+
+%% 1.5. Plotting contours even more detailled k1xKm
+
+%First run 1.2., you need the OP
+OP = [817.997862594090;0.0150000000000000;0;44.0003776995965;28.0006819003247;0.435000000000000;288.986155907162]
+
+%keep these calculated values but change k1 and Km
+xk1 = [40:1:42,42:0.25:46,46:1:48];
+yk1 = [220:1:370];
+[Xgrid,Ygrid] = meshgrid(xk1,yk1);
+Mresnorms = Xgrid;
+
+for nrk1 = 1:length(xk1) 
+    for nrkm = 1:length(yk1)
+        
+        valk1 = xk1(nrk1);
+        valk1 = yk1(nrkm);
+        
+        OP(4) = valk1;
+        OP(7) = valk1;
+        
+        lb = OP';
+        ub = OP';
+        [newOP,resnorm] = lsqnonlin(@Inputlsqnonlin,OP,lb,ub);
+        newOP = newOP';
+
+        Mresnorms(nrkm, nrk1) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k1')
+ylabel('Km')
+zlabel('Resnorm')
+title('Surfgrid k1xKm 151x23');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+xlabel('k1')
+ylabel('Km')
+title('Contourgraph k1xKm 151x23');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5);
+s.EdgeColor = 'none';
+title('Surfgrid no edge k1xKm 151x23');
+
+%% 1.5.2. Plotting contours k1xKm 151x23 using Inputnonlin
+
+%First run 1.2., you need the OP
+
+%keep these calculated values but change k1 and Km
+xk1 = [40:0.25:42,42:0.1:46,46:0.25:48];
+ykm = [220:1:370];
+[Xgrid,Ygrid] = meshgrid(xk1,ykm);
+Mresnorms = Xgrid;
+
+for nrk1 = 1:length(xk1) 
+    for nrkm = 1:length(yk1)
+        
+        valk1 = xk1(nrk1);
+        valkm = ykm(nrkm);
+        
+        OP(4) = valk1;
+        OP(7) = valkm;
+        
+        resnorm = sum((Inputlsqnonlin (OP)).^2);
+        Mresnorms(nrkm, nrk1) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k1')
+ylabel('Km')
+zlabel('Sum of squares')
+title('Surfaceplot k1 x Km x Sum of squares');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms,'ShowText','on'))
+xlabel('k1')
+ylabel('Km')
+title('Contourplot k1 x Km x Sum of squares');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5);
+s.EdgeColor = 'none';
+title('Surface plot No Edge k1 x Km x Sum of squares');
+
+%% 2.1. Plotting contours k1xP0 131x21 using Inputnonlin
+
+%First run 1.2., you need the OP
+OP = [818.001;0.0150;0;44.0001;28.0001;0.4350;289.0011];
+%keep these calculated values but change k1 and Km
+xk1 = [40:0.25:42,42:0.1:46,46:0.25:48];
+yP0 = [750:1:880];
+[Xgrid,Ygrid] = meshgrid(xk1,yP0);
+Mresnorms = Xgrid;
+
+for nrk1 = 1:length(xk1) 
+    for nrkm = 1:length(yP0)
+        
+        valk1 = xk1(nrk1);
+        valP0 = yP0(nrkm);
+        
+        OP(4) = valk1;
+        OP(1) = valP0;
+        
+        resnorm = sum((Inputlsqnonlin (OP)).^2);
+        Mresnorms(nrkm, nrk1) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k1')
+ylabel('P0')
+zlabel('Logarithm Sum of squares')
+title('Surfaceplot k1 x P0 x Sum of squares');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k1')
+ylabel('P0')
+title('Contourplot k1 x P0 x Sum of squares');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5);
+colorbar;
+s.EdgeColor = 'none';
+xlabel('k1')
+ylabel('P0')
+zlabel('Logarithm Sum of squares')
+title('Surface plot No Edge k1 x P0 x Sum of squares');
+
+%% 3.1. Plotting contours KmxP0 131x151 using Inputnonlin
+
+%First run 1.2., you need the OP
+OP = [818.001;0.0150;0;44.0001;28.0001;0.4350;289.0011];
+%keep these calculated values but change k1 and Km
+xKm = [220:1:370];
+yP0 = [750:1:880];
+[Xgrid,Ygrid] = meshgrid(xKm,yP0);
+Mresnorms = Xgrid;
+
+for nrKm = 1:length(xKm) 
+    for nrP0 = 1:length(yP0)
+        
+        valKm = xKm(nrKm);
+        valP0 = yP0(nrP0);
+        
+        OP(7) = valKm;
+        OP(1) = valP0;
+        
+        resnorm = sum((Inputlsqnonlin (OP)).^2);
+        Mresnorms(nrP0, nrKm) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('Km')
+ylabel('P0')
+zlabel('Logarithm Sum of squares')
+title('Surfaceplot Km x P0 x Sum of squares');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('Km')
+ylabel('P0')
+title('Contourplot Km x P0 x Sum of squares');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5);
+colorbar;
+s.EdgeColor = 'none';
+xlabel('Km')
+ylabel('P0')
+zlabel('Logarithm Sum of squares')
+title('Surface plot No Edge Km x P0 x Sum of squares');
+
+%% 4.1. Plotting contours k2xP0 131x151 using Inputnonlin
+
+%First run 1.2., you need the OP
+OP = [818.001;0.0150;0;44.0001;28.0001;0.4350;289.0011];
+
+%keep these calculated values but change k1 and Km
+xk2 = [26:0.05:30];
+yP0 = [750:1:880];
+[Xgrid,Ygrid] = meshgrid(xk2,yP0);
+Mresnorms = Xgrid;
+
+for nrk2 = 1:length(xk2) 
+    for nrP0 = 1:length(yP0)
+        
+        valk2 = xk2(nrk2);
+        valP0 = yP0(nrP0);
+        
+        OP(5) = valk2;
+        OP(1) = valP0;
+        
+        resnorm = sum((Inputlsqnonlin (OP)).^2);
+        Mresnorms(nrP0, nrk2) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k2')
+ylabel('P0')
+zlabel('Logarithm Sum of squares')
+title('Surfaceplot k2 x P0 x Sum of squares');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k2')
+ylabel('P0')
+title('Contourplot k2 x P0 x Sum of squares');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5);
+colorbar;
+s.EdgeColor = 'none';
+xlabel('k2')
+ylabel('P0')
+zlabel('Logarithm Sum of squares')
+title('Surface plot No Edge k2 x P0 x Sum of squares');
+
+%% 5.1. Plotting contours k2xKm 131x151 using Inputnonlin
+
+%First run 1.2., you need the OP
+OP = [818.001;0.0150;0;44.0001;28.0001;0.4350;289.0011];
+
+%keep these calculated values but change k1 and Km
+xk2 = [26:0.05:30];
+yKm = [220:1:370];
+[Xgrid,Ygrid] = meshgrid(xk2,yKm);
+Mresnorms = Xgrid;
+
+for nrk2 = 1:length(xk2) 
+    for nrkm = 1:length(yKm)
+        
+        valk2 = xk2(nrk2);
+        valKm = yKm(nrkm);
+        
+        OP(5) = valk2;
+        OP(7) = valKm;
+        
+        resnorm = sum((Inputlsqnonlin (OP)).^2);
+        Mresnorms(nrkm, nrk2) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k2')
+ylabel('Km')
+zlabel('Logarithm Sum of squares')
+title('Surfaceplot k2 x Km x Sum of squares');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k2')
+ylabel('Km')
+title('Contourplot k2 x Km x Sum of squares');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5);
+colorbar;
+s.EdgeColor = 'none';
+xlabel('k2')
+ylabel('Km')
+zlabel('Logarithm Sum of squares')
+title('Surface plot No Edge k2 x Km x Sum of squares');
+
+%% 6.1. Plotting contours k2xk1 87x161 using Inputnonlin
+
+%First run 1.2., you need the OP
+OP = [818.001;0.0150;0;44.0001;28.0001;0.4350;289.0011];
+
+%keep these calculated values but change k1 and Km
+xk2 = [24:0.05:32];
+yk1 = [40:0.25:42,42:0.1:46,46:0.25:48];
+[Xgrid,Ygrid] = meshgrid(xk2,yk1);
+Mresnorms = Xgrid;
+
+for nrk1 = 1:length(xk2) 
+    for nrkm = 1:length(yk1)
+        
+        valk2 = xk2(nrk1);
+        valk1 = yk1(nrkm);
+        
+        OP(5) = valk2;
+        OP(4) = valk1;
+        
+        resnorm = sum((Inputlsqnonlin (OP)).^2);
+        Mresnorms(nrkm, nrk1) = resnorm;
+
+    end
+end
+
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k2')
+ylabel('k1')
+zlabel('Logarithm Sum of squares')
+title('Surfaceplot k2 x k1 x Sum of squares');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k2')
+ylabel('k1')
+title('Contourplot k2 x k1 x Sum of squares');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5);
+colorbar;
+s.EdgeColor = 'none';
+xlabel('k2')
+ylabel('k1')
+zlabel('Logarithm Sum of squares')
+title('Surface plot No Edge k2 x k1 x Sum of squares');
+
+%% rest of parameters niet vast
+OP = [817.997862594090;0.0150000000000000;0;44.0003776995965;28.0006819003247;0.435000000000000;288.986155907162]
+
+%keep these calculated values but change k1 and Km
+xk1 = 40:1:50;
+yk1 = 250:5:350;
+[Xgrid,Ygrid] = meshgrid(xk1,yk1);
+Mresnorms = Xgrid;
+
+for nrk1 = 1:length(xk1) 
+    for nrkm = 1:length(yk1)
+        
+        valk1 = xk1(nrk1);
+        valk1 = yk1(nrkm);
+        
+        OP(4) = valk1;
+        OP(7) = valk1;
+        
+        lb = [0, 0.0150, 0, valk1, 0, 0.435, valk1];
+        ub = [15000, 0.0150, 0, valk1, 150, 0.435, valk1];
+        [newOP,resnorm] = lsqnonlin(@Inputlsqnonlin,OP,lb,ub);
+        newOP = newOP'
+
+        Mresnorms(nrkm, nrk1) = resnorm;
+
+    end
+end
+
+surf(Xgrid,Ygrid,Mresnorms)
+hold on
+figure
+contour(Xgrid,Ygrid,Mresnorms)
+
+%%
+for nrk1 = 1:length(xk1) 
+    for nrkm = 1:length(yk1)
+        
+        valk1 = xk1(nrk1);
+        valk1 = yk1(nrkm);
+%setting 2 parameters still 
+
+%Best initial values according to Piet:
+P0 = 810;
+E0 = 0.0150;
+T0 = 0;
+k1 = valk1;
+k2 = 25.8;
+k3 = 0.435;
+Km = 275;
+
+%Make a vector of these
+Initialval = [P0, E0, T0, k1, k2, k3, Km];
+
+%Plot it
+[Tbest,Ybest] = ode15s(@Setofdifferentials,0:stepsizeT:16,Initialval);
+Ygreen = Ybest(:,3);
+figure; 
+plot(Tbest,Ygreen,'g');
+title('Thrombin Generation Curve');
+hold on
+%plot(Tbest,Ybest(:,1),'--g');
+%plot(Tbest,Ybest(:,2),':g')
+
+
+%options = optimoptions('lsqnonlin','Display','iter');
+%[Outputparameters,resnorm,residual,exitflag,output] = lsqnonlin(@Inputlsqnonlin,Initialval,[],[],options);
+lb = [0, 0.0150, 0, 0, 0, 0.435, 0];
+ub = [15000, 0.0150, 0, 150, 150, 0.435, 400];
+[OP,resnorm] = lsqnonlin(@Inputlsqnonlin,Initialval,lb,ub);
+OP = OP'
+
+
+%Plot the differentialequation with the new parameters
+[Tcalculated,Ycalculated] = ode15s(@Setofdifferentials,0:stepsizeT:16,OP);
+plot(Tcalculated,Ycalculated(:,3),'r');
+%plot(Tcalculated,Ycalculated(:,2),':r');
+%plot(Tcalculated,Ycalculated(:,1),'--r');
+
+ end
+end
+
+%% Making 3D plot with 3 variables
+
+
+%First run 1.2., you need the OP
+OP = [817.997862594090;0.0150000000000000;0;44.0003776995965;28.0006819003247;0.435000000000000;288.986155907162];
+
+%keep these calculated values but change k1 and Km
+xk2 = [24:0.2:32];
+yk1 = [40:0.2:60];
+zKm = [255:1:345];
+[Xgrid,Ygrid,Zgrid] = meshgrid(xk2,yk1,zKm);
+Mresnorms = Xgrid;
+
+for nrk2 = 1:length(xk2) 
+    for nrk1 = 1:length(yk1)
+        for nrKm = 1:length(zKm)
+        
+        valk2 = xk2(nrk2);
+        valk1 = yk1(nrk1);
+        valKm = zKm(nrKm);
+        
+        OP(5) = valk2;
+        OP(4) = valk1;
+        OP(7) = valKm;
+        
+        resnorm = sum((Inputlsqnonlin (OP)).^2);
+        Mresnorms(nrk1, nrk2, nrKm) = resnorm;
+        nrk2
+        
+        end
+    end
+end
+
+logresnorms = log(Mresnorms);
+
+x = [];
+for r = 1:length(yk1)
+    for q = 1:length(xk2) 
+            for z = 1:length(zKm)
+            
+            if logresnorms(r,q,z) <= 5
+                x = [x;[r,q,z]]
+                z;
+            end
+               
+        end
+    end
+end
+
+figure
+plot3(x(:,1),x(:,2),x(:,3),'.');
+
+save 05102019.mat
+
+%%
+figure
+surf(Xgrid,Ygrid,log(Mresnorms))
+colorbar
+xlabel('k1')
+ylabel('Km')
+zlabel('Resnorm')
+title('Surfgrid Inputlsqnonlin k1xKm 151x23');
+
+figure
+contour(Xgrid,Ygrid,log(Mresnorms))
+xlabel('k1')
+ylabel('Km')
+title('Contourgraph Inputlsqnonlin k1xKm 151x23');
+
+figure
+s = surf(Xgrid,Ygrid,log(Mresnorms),'FaceAlpha',0.5);
+s.EdgeColor = 'none';
+title('Surfgrid no edge Inputlsqnonlin k1xKm 151x23');
+
+%Matrix is also loaded in docs
+
 
