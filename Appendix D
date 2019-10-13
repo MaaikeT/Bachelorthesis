@@ -1,1 +1,28 @@
 
+function y = Inputlsqnonlin (yInit)
+% Input: intial values for the set of differential equations
+% This function solves the differential equation with this input.
+% It then calculates the difference between the
+% thrombingenerationncurve and the data of funcrnddata (which is globally
+% set)
+
+global fittingdata stepsizeT;
+% fittingdata is in this case a matrix of 1 column with the T values and one
+% column with the associated y values
+
+[T,Y] = ode15s(@Setofdifferentials,0:stepsizeT:16,yInit);
+
+thrombingenfunc = Y(:,3);
+V = zeros(length(fittingdata),1);
+
+% the function checks where the timeslot is exactly the same
+for i = 1:length(fittingdata) 
+    for j = 1:length(T)
+        if fittingdata(i,1) == T(j)
+        V(i,1) = thrombingenfunc(j,1);
+        end
+    end
+end
+
+q = V(:,1) - fittingdata(:,2); 
+y=q;
